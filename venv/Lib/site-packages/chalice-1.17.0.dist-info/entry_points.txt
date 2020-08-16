@@ -1,0 +1,3 @@
+[console_scripts]
+chalice = chalice.cli:main
+
