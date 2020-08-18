@@ -4,5 +4,5 @@
 
 Workflow:
 <ol> 
-  <li> Day 1: configured venv, set up chalice and lambda </li>
-  <li> Day 2: setup alpaca api GET requests, edited enviroment variables with python and lambda </li>
+  <li> configured venv, set up chalice and lambda </li>
+  <li> setup alpaca api GET requests, deployed enviroment variables with python runtime and in lambda console </li>
