@@ -1,40 +1,58 @@
+import requests
 from chalice import Chalice, Rate
-from alpacatrade import *
+
+ENDPOINT_URL ="https://paper-api.alpaca.markets"
+API_KEY = "PKQ6JRI1NRLNKECCEJ86"
+SECRET_KEY = "VYxbJVGezVU7LZRa4bx1lGkWZ4klOIJQQV2IQ2uz"
+
+ACCOUNT_URL = '{}/v2/account'.format(ENDPOINT_URL)
+ORDER_URL = '{}/v2/orders'.format(ENDPOINT_URL)
+CLOCK_URL = '{}/v2/clock'.format(ENDPOINT_URL)
+DATA_URL = 'https://data.alpaca.markets/v1'
+HEADERS = {'APCA-API-KEY-ID': API_KEY, 'APCA-API-SECRET-KEY': SECRET_KEY}
 
 
-app = Chalice(app_name='tradingview-alerts')
-print(get_account()["id"])
-print(create_order("TQQQ", 1, "buy", "market", "gtc"))
+app = Chalice(app_name='luna6trade')
+
+# print(get_account()["id"])
+# print(create_order("TQQQ", 1, "buy", "market", "gtc"))
+
+def create_order(symbol, qty, side, type, time_in_force):
+    data = {
+        "symbol": symbol,
+        "qty": qty,
+        "side": side,
+        "type": type,
+        "time_in_force": time_in_force
+    }
+    r = requests.post(ORDER_URL, json=data, headers=HEADERS)
+    return json.loads(r.content)
 
 
 @app.route('/')
 def index():
-    return {"tradingview-alerts": "luna6algotrader"}
+    return {"made by alexander lin": "luna6algotrader",
+            "message": "this is technically an api, and by visiting the URL i think you're calling on a lambda function..."
+                       "anyways, im trying to make this webpage or api prettier but I'll get to it after the trading logic",
+            "cheers": "thanks for visiting! (:"}
 
 
-@app.route('/execute', methods=['POST'])
-def execute_order():
+@app.route('/account', methods=['POST'])
+def get_account():
     request = app.current_request
     webhook_message = request.json_body
 
     return {
+        "account_id": get_account()["id"],
         "message": webhook_message
     }
 
+@app.schedule(Rate(1, unit=Rate.HOURS))
+def every_min(event):
+    r = requests.get(CLOCK_URL, headers=HEADERS)
+    marketclock = json.loads(r.content)
 
-@app.route('/history')
-def history():
-    log = [
-        {"trade 1": "bought 3 nikes"},
-        {"trade 2": "sold 5 tqqq"}
-    ]
-    return {"log": log}
-
-
-@app.schedule(Rate(30, unit=Rate.MINUTES))
-def every_thirty_min(event):
-    create_order("AAPL", 1, "buy", "market", "gtc")
-
-
-
+    if marketclock["is_open"]:
+        # trading logic
+        create_order("MSFT", 1, "buy", "market", "gtc")
 
