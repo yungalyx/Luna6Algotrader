@@ -1,21 +1,27 @@
-import requests
+import requests, json
 from chalice import Chalice, Rate
+import os
 
-ENDPOINT_URL ="https://paper-api.alpaca.markets"
-API_KEY = "PKQ6JRI1NRLNKECCEJ86"
-SECRET_KEY = "VYxbJVGezVU7LZRa4bx1lGkWZ4klOIJQQV2IQ2uz"
+ENDPOINT_URL = "https://paper-api.alpaca.markets"
 
 ACCOUNT_URL = '{}/v2/account'.format(ENDPOINT_URL)
 ORDER_URL = '{}/v2/orders'.format(ENDPOINT_URL)
 CLOCK_URL = '{}/v2/clock'.format(ENDPOINT_URL)
 DATA_URL = 'https://data.alpaca.markets/v1'
-HEADERS = {'APCA-API-KEY-ID': API_KEY, 'APCA-API-SECRET-KEY': SECRET_KEY}
-
+HEADERS = {'APCA-API-KEY-ID': os.environ['API_KEY'], 'APCA-API-SECRET-KEY': os.environ['SECRET_KEY']}
 
 app = Chalice(app_name='luna6trade')
 
-# print(get_account()["id"])
-# print(create_order("TQQQ", 1, "buy", "market", "gtc"))
+
+# print(os.environ['API_KEY'])
+
+def get_alpaca_account():
+    r = requests.get(ACCOUNT_URL, headers=HEADERS)
+    return json.loads(r.content)
+
+
+print(get_alpaca_account())
+
 
 def create_order(symbol, qty, side, type, time_in_force):
     data = {
@@ -43,9 +49,10 @@ def get_account():
     webhook_message = request.json_body
 
     return {
-        "account_id": get_account()["id"],
+        "account_id": get_alpaca_account()["id"],
         "message": webhook_message
     }
+
 
 @app.schedule(Rate(1, unit=Rate.HOURS))
 def every_min(event):
@@ -55,4 +62,3 @@ def every_min(event):
     if marketclock["is_open"]:
         # trading logic
         create_order("MSFT", 1, "buy", "market", "gtc")
-
