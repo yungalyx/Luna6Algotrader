@@ -9,4 +9,11 @@ Workflow:
   <li> adjusted env variables </li>
   <li> figuring out a way to access real time financial data without yfinance... just through http requests. </li>
 
--[] todo
+BIG GOALS: 
+1. can i host api with a secure domain name? (e.g, www.yungalyx.ca)
+2. build calypso6 as a website that makes calls to lambda function.. 
+3. persist data somehow in lambda? 
+
+TERMS: 
+1. FLASK vs. CHALICE
+2. amazon d3 database.. 
