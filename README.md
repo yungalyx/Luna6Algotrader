@@ -9,4 +9,4 @@ Workflow:
   <li> adjusted env variables </li>
   <li> figuring out a way to access real time financial data without yfinance... just through http requests. </li>
 
--[ ] todo
+-[] todo
