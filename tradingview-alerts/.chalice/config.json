@@ -3,6 +3,13 @@
   "app_name": "tradingview-alerts",
   "stages": {
     "dev": {
+      "environment_variables": {
+        "PYTHONUNBUFFERED":"1",
+        "SECRET_KEY":"VYxbJVGezVU7LZRa4bx1lGkWZ4klOIJQQV2IQ2uz",
+        "API_KEY":"PKQ6JRI1NRLNKECCEJ86",
+        "ENDPOINT_URL":"https://paper-api.alpaca.markets",
+        "FINNHUBKEY":"btamsh748v6vivh8s7rg"
+      },
       "api_gateway_stage": "api"
     }
   }
