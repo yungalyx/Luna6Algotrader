@@ -17,3 +17,5 @@ BIG GOALS:
 TERMS: 
 1. FLASK vs. CHALICE
 2. amazon d3 database.. 
+
+https://f4dwcxv7v8.execute-api.us-west-2.amazonaws.com/api/
